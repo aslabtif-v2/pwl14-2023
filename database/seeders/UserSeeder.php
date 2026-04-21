@@ -21,11 +21,12 @@ class UserSeeder extends Seeder
         $npm = $faker->unique()->numerify('##########');
 
             $user = User::Create([
-                'npm' => $npm,
+                'npm' => 123456789,
                 'firstname' => $faker->firstName,
                 'lastname' => $faker->lastName,
-                'email' => $faker->unique()->safeEmail,
+                'email' => 'mahasiswa12@gmail.com',
                 'password' => bcrypt('12345678'),
             ]);
+            $user->assignRole('mahasiswa');
     }
 }

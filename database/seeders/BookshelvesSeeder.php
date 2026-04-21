@@ -14,7 +14,7 @@ class BookshelvesSeeder extends Seeder
     public function run(): void
     {
         DB::table('bookshelves')->insert([
-            'code' => 2,
+            'code' => 3,
             'name' => 'Fiction',
         ]);
     }

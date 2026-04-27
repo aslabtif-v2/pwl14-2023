@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
+     protected $fillable =[
+        'title',
+        'author',
+        'year',
+        'publisher',
+        'city',
+        'cover',
+        'bookshelf_id',
+    ];
+
     public function bookshelf()
     {
         return $this->belongsTo(Bookshelves::class, 'bookshelf_id', 'id');

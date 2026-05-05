@@ -23,6 +23,7 @@
                         <th>Cover</th>
                         <th>Kuantitas</th>
                         <th>Kode Rak</th>
+                        <th>Aksi</th>
                     </tr>
                 </x-slot>
 
@@ -44,6 +45,12 @@
                         </td>
                         <td>{{ $book->quantity }}</td>
                         <td>{{ $book->bookshelf->code }}-{{ $book->bookshelf->name }}</td>
+                        <td><x-primary-button tag="a" href="{{ route('book.edit', $book->id) }}">Edit</x-primary-button><form action="{{ route('book.destroy', $book->id) }}" method="post" class="inline-block" onsubmit="return confirm('Apakah anda yakin?');">
+                            @csrf
+                            @method('DELETE')
+                            <x-danger-button type="submit">Hapus</x-danger-button>
+                        </form></td>
+                        
                     </tr>
                 @endforeach
             </x-table>

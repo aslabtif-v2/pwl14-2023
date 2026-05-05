@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bookshelf;
+use App\Models\Book;
 use App\Models\Bookshelves;
 use Illuminate\Http\Request;
 
@@ -10,13 +10,51 @@ class BookController extends Controller
 {
     public function index()
     {
-        $bookshelves = Bookshelves::get();
-        return view('books.index', compact('bookshelves'));
+        $data['books'] = Book::with('bookshelf')->get();
+        return view('books.index', $data);
     }
 
-    public function show($id)
-    {
-        $bookshelves = Bookshelves::findOrFail($id);
-        return view('books.show', compact('bookshelves'));
+    // public function show($id)
+    // {
+    //     $bookshelves = Bookshelves::findOrFail($id);
+    //     return view('books.show', compact('bookshelves'));
+    // }
+    public function create(){
+        $data['bookshelves'] = Bookshelves::pluck('name', 'id');
+        return view ('books.create', $data);
+    }
+
+    public function store(Request $request){
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'author' => 'required|max:150',
+            'year' => 'required|digits:4|integer|min:2000|max:'.(date('Y')),
+            'publisher' => 'required|max:100',
+            'city' => 'required|max:100',
+            'quantity' => 'required|numeric',
+            'bookshelf_id' => 'required',
+            'cover' => 'nullable|image',
+        ]);
+
+        if ($request->hasFile('cover')){
+            $path = $request->file('cover')->storeAs(
+                'cover_buku',
+                'cover_buku_'.time() . '.' . $request->file('cover')->extension(),
+            );
+            $validated['cover'] = basename($path);
+        }
+
+        Book::create($validated);
+
+        $notification = array(
+            'message' => 'Data Buku Berhasil Ditambahkan!',
+            'alert_type' => 'success'
+        );
+
+        if($request->save == true){
+            return redirect()->route('book')->with($notification);
+        } else {
+            return redirect()->route('books.create')->with($notification);
+        }
     }
 }

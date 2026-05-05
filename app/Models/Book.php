@@ -11,13 +11,13 @@ class Book extends Model
         'author',
         'year',
         'publisher',
-        'city',
         'cover',
+        'city',
         'bookshelf_id',
     ];
 
     public function bookshelf()
     {
-        return $this->belongsTo(Bookshelves::class, 'bookshelf_id', 'id');
+        return $this->belongsTo(Bookshelves::class);
     }
 }

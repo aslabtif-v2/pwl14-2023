@@ -25,5 +25,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/books/{id}/edit', [BookController::class, 'edit'])->name('book.edit');
     Route::match(['PUT','PATCH'],'books/{id}',[BookController::class, 'update'])->name('book.update');
     Route::delete('books/{id}', [BookController::class, 'destroy'])->name('book.destroy');
+    Route::get('/books/print', [BookController::class, 'print'])->name('book.print');
 });
+
 require __DIR__.'/auth.php';

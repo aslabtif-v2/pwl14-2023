@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Bookshelves;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
@@ -43,6 +44,7 @@ class BookController extends Controller
             $path = $request->file('cover')->storeAs(
                 'cover_buku',
                 'cover_buku_' . time() . '.' . $request->file('cover')->extension(),
+                'public'
             );
             $validated['cover'] = basename($path);
         }
@@ -112,5 +114,12 @@ class BookController extends Controller
             'alert-type' => 'success'
         );
         return redirect()->route('book')->with($notification);
+    }
+
+    public function print(){
+        $books = Book::all();
+
+        $pdf = Pdf::loadView('books.print', ['books' => $books]);
+        return $pdf->stream('data_buku.pdf');
     }
 }
